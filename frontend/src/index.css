@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  /* === Logo-extracted Palette === */
+  /* Primary: Vibrant Terracotta */
+  --color-primary-50: #fdf3f0;
+  --color-primary-100: #fce4db;
+  --color-primary-200: #f8c7b4;
+  --color-primary-300: #f3a48a;
+  --color-primary-400: #ec7e5c;
+  --color-primary-500: #d45c3c;
+  --color-primary-600: #b84a2e;
+  --color-primary-700: #963a23;
+  --color-primary-800: #7a2f1e;
+  --color-primary-900: #3d1610;
+
+  /* Accent: Sage/Olive Green (DarkVibrant / Muted) */
+  --color-accent-50: #f4f6ec;
+  --color-accent-100: #e3ebd0;
+  --color-accent-200: #c7d6a2;
+  --color-accent-300: #a8bd72;
+  --color-accent-400: #8ea45c;
+  --color-accent-500: #7b8e47;
+  --color-accent-600: #5c651f;
+  --color-accent-700: #4a5218;
+  --color-accent-800: #3a4012;
+  --color-accent-900: #262b0c;
+
+  /* Warm light: LightVibrant Peach */
+  --color-warm-50: #fff9f3;
+  --color-warm-100: #fef0df;
+  --color-warm-200: #fddeba;
+  --color-warm-300: #fcc990;
+  --color-warm-400: #f6b371;
+  --color-warm-500: #f09a4e;
+  --color-warm-600: #e07e27;
+  --color-warm-700: #b8631c;
+  --color-warm-800: #924d17;
+  --color-warm-900: #5e3110;
+
+  /* Sidebar */
+  --color-sidebar-bg: #1f1e17;
+  --color-sidebar-surface: #2a2919;
+  --color-sidebar-border: #3a3825;
+  --color-sidebar-active: #d45c3c;
+  --color-sidebar-text: #c9c6a8;
+  --color-sidebar-text-muted: #7a7860;
+}
+
+body {
+  background-color: #f7f6f1;
+  color: #1f1e17;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}

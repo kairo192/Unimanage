@@ -1,0 +1,30 @@
+{
+  "name": "unimanage-ai-backend",
+  "version": "1.0.0",
+  "description": "Backend for UniManage AI",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.1",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^7.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^2.1.1",
+    "pg": "^8.11.5",
+    "sharp": "^0.34.5",
+    "xlsx": "^0.18.5",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
