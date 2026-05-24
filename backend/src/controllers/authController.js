@@ -5,6 +5,7 @@ import { findUserByEmail, createUser, findUserById, getAllUsers, updateUserById,
 import { logActivity } from '../utils/activityLogger.js';
 import pool from '../config/db.js';
 import { parseUserAgent, getIpLocation } from '../utils/sessionHelper.js';
+import { uploadToCloud } from '../utils/storage.js';
 
 const passwordSchema = z.string().min(8, 'Password must be at least 8 characters').max(128);
 const emailSchema = z.string().email('Invalid email format').max(255);
@@ -476,7 +477,8 @@ export const updateProfile = async (req, res) => {
 
     let avatarUrl = null;
     if (req.file) {
-      avatarUrl = `/uploads/avatars/${req.file.filename}`;
+      const cloudUrl = await uploadToCloud(req.file.path, `avatars/${req.file.filename}`);
+      avatarUrl = cloudUrl || `/uploads/avatars/${req.file.filename}`;
     }
 
     const updatedUser = await updateUserProfile(userId, name, avatarUrl, hashedPassword);
