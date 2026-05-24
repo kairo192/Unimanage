@@ -727,10 +727,17 @@ export default function SettingsPage() {
   const handleEditUser = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/auth/users/${selectedUser.id}`, editFormData);
+      const res = await api.put(`/auth/users/${selectedUser.id}`, editFormData);
       setShowEditModal(false);
       fetchUsers();
-      showToast('Account details have been modified successfully!', 'success');
+      // If editing own account, update localStorage + state immediately
+      if (currentUser && selectedUser.id === currentUser.id) {
+        const updated = { ...currentUser, name: editFormData.name, role: editFormData.role };
+        localStorage.setItem('user', JSON.stringify(updated));
+        setCurrentUser(updated);
+        window.dispatchEvent(new Event('userProfileUpdated'));
+      }
+      showToast(res.data?.message || 'Account details have been modified successfully!', 'success');
     } catch (err) {
       showToast(err.response?.data?.error || 'Failed to modify account.', 'danger');
     }
