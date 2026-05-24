@@ -321,7 +321,7 @@ export default function TicketsPage() {
                 <div>
                   <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>{t.image}</div>
                   <img
-                    src={selectedTicket.image_url.startsWith('/') ? `${API_ORIGIN}${selectedTicket.image_url}` : `${API_ORIGIN}/${selectedTicket.image_url}`}
+                    src={selectedTicket.image_url.startsWith('http') ? selectedTicket.image_url : selectedTicket.image_url.startsWith('/') ? `${API_ORIGIN}${selectedTicket.image_url}` : `${API_ORIGIN}/${selectedTicket.image_url}`}
                     alt={t.ticket}
                     style={{
                       width: '100%', maxHeight: '360px', objectFit: 'contain',

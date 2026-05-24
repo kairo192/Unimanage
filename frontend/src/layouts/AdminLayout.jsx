@@ -391,7 +391,7 @@ export default function AdminLayout() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.04)', marginBottom: '6px', flexDirection: 'row' }}>
             {user?.avatar ? (
               <img 
-                src={`${API_ORIGIN}${user.avatar}`} 
+                src={user.avatar.startsWith('http') ? user.avatar : `${API_ORIGIN}${user.avatar}`} 
                 alt="Avatar" 
                 style={{ width: '32px', height: '32px', borderRadius: '8px', objectFit: 'cover', flexShrink: 0 }} 
               />
@@ -568,7 +568,7 @@ export default function AdminLayout() {
               </div>
             {user?.avatar ? (
               <img 
-                src={`${API_ORIGIN}${user.avatar}`} 
+                src={user.avatar.startsWith('http') ? user.avatar : `${API_ORIGIN}${user.avatar}`} 
                 alt="Avatar" 
                 style={{
                   width: '38px', height: '38px', borderRadius: '10px', 

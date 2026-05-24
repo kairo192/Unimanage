@@ -395,7 +395,7 @@ export default function SettingsPage() {
         setCurrentUser(parsed);
         setProfileName(parsed.name || '');
         if (parsed.avatar) {
-          setAvatarPreview(API_ORIGIN + parsed.avatar);
+          setAvatarPreview(parsed.avatar.startsWith('http') ? parsed.avatar : API_ORIGIN + parsed.avatar);
         }
       } catch (err) {
         console.error('Failed to parse user storage:', err);
@@ -459,7 +459,7 @@ export default function SettingsPage() {
       setProfilePassword('');
       setAvatarFile(null);
       if (updatedUser.avatar) {
-        setAvatarPreview(API_ORIGIN + updatedUser.avatar);
+        setAvatarPreview(updatedUser.avatar.startsWith('http') ? updatedUser.avatar : API_ORIGIN + updatedUser.avatar);
       }
 
       showToast(t.profileSuccess || 'Profile updated successfully!', 'success');
