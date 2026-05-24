@@ -3,21 +3,50 @@ import api from '../api/axios';
 import { ConfirmDialog, AlertDialog } from '../components/CustomDialogs';
 import { Wrench, Filter, X, Trash2 } from 'lucide-react';
 
+const T = {
+  en: {
+    title: 'Maintenance Tickets', all: 'All', pending: 'Pending', inProgress: 'In Progress', resolved: 'Resolved',
+    loading: 'Loading tickets...', empty: 'No tickets found for this filter.',
+    room: 'Room', roomLabel: 'Room:', delete: 'Delete ticket', ticket: 'Ticket', type: 'Type', status: 'Status',
+    student: 'Student', description: 'Description', image: 'Attached Image',
+    noDesc: 'No description provided.',
+    updateFail: 'Failed to update ticket status.', deleteFail: 'Failed to delete ticket.',
+  },
+  ar: {
+    title: 'تذاكر الصيانة', all: 'الكل', pending: 'قيد الانتظار', inProgress: 'قيد التنفيذ', resolved: 'تم الحل',
+    loading: 'جاري تحميل التذاكر...', empty: 'لا توجد تذاكر تطابق هذا الفلتر.',
+    room: 'الغرفة', roomLabel: 'الغرفة:', delete: 'حذف التذكرة', ticket: 'تذكرة', type: 'النوع', status: 'الحالة',
+    student: 'الطالب', description: 'الوصف', image: 'الصورة المرفقة',
+    noDesc: 'لا يوجد وصف.',
+    updateFail: 'فشل تحديث حالة التذكرة.', deleteFail: 'فشل حذف التذكرة.',
+  },
+  fr: {
+    title: 'Tickets de Maintenance', all: 'Tous', pending: 'En attente', inProgress: 'En cours', resolved: 'Résolu',
+    loading: 'Chargement des tickets...', empty: 'Aucun ticket trouvé pour ce filtre.',
+    room: 'Chambre', roomLabel: 'Chambre :', delete: 'Supprimer le ticket', ticket: 'Ticket', type: 'Type', status: 'Statut',
+    student: 'Étudiant', description: 'Description', image: 'Image jointe',
+    noDesc: 'Aucune description fournie.',
+    updateFail: 'Échec de la mise à jour du statut.', deleteFail: 'Échec de la suppression du ticket.',
+  },
+};
+
 const PRIORITY_STYLE = {
   high:   { bg: '#fce4db', color: '#b84a2e', border: '#f8c7b4', dot: '#d45c3c' },
   medium: { bg: '#fef0df', color: '#b8631c', border: '#fddeba', dot: '#e07e27' },
   low:    { bg: '#f4f6ec', color: '#5c651f', border: '#c7d6a2', dot: '#8ea45c' },
 };
 const STATUS_STYLE = {
-  resolved:    { bg: '#f4f6ec', color: '#5c651f', label: 'Resolved' },
-  in_progress: { bg: '#fef0df', color: '#b8631c', label: 'In Progress' },
-  pending:     { bg: '#f5f1ea', color: '#7a7860', label: 'Pending' },
+  resolved:    { bg: '#f4f6ec', color: '#5c651f' },
+  in_progress: { bg: '#fef0df', color: '#b8631c' },
+  pending:     { bg: '#f5f1ea', color: '#7a7860' },
 };
 
 const stripApi = (url) => (url || '').replace(/\/api\/?$/, '');
 const API_ORIGIN = stripApi(api.defaults.baseURL);
 
 export default function TicketsPage() {
+  const [lang] = useState(() => localStorage.getItem('lang') || 'en');
+  const t = T[lang] || T.en;
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [alertDialog, setAlertDialog] = useState(null);
@@ -38,7 +67,7 @@ export default function TicketsPage() {
       await api.put(`/tickets/${id}/status`, { status });
       fetchTickets();
     } catch (err) { 
-      const msg = err?.response?.data?.error || 'Failed to update ticket status.';
+      const msg = err?.response?.data?.error || t.updateFail;
       setAlertDialog({ message: msg });
     }
   };
@@ -48,7 +77,7 @@ export default function TicketsPage() {
       await api.delete(`/tickets/${id}`);
       fetchTickets();
     } catch (err) {
-      const msg = err?.response?.data?.error || 'Failed to delete ticket.';
+      const msg = err?.response?.data?.error || t.deleteFail;
       setAlertDialog({ message: msg });
     }
   };
@@ -66,17 +95,17 @@ export default function TicketsPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a14', marginBottom: '4px' }}>Maintenance Tickets</h1>
-          <p style={{ color: '#8a7f72', fontSize: '13px' }}>تذاكر الصيانة · Tickets de maintenance</p>
+          <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a14', marginBottom: '4px' }}>{t.title}</h1>
+          <p style={{ color: '#8a7f72', fontSize: '13px' }}>{T.ar.title} · {T.fr.title}</p>
         </div>
       </div>
 
       <div style={{ display: 'flex', gap: '8px', background: '#ffffff', padding: '6px', borderRadius: '12px', border: '1px solid #e8e2d6', width: 'fit-content' }}>
         {[
-          { key: 'all', label: 'All' },
-          { key: 'pending', label: 'Pending' },
-          { key: 'in_progress', label: 'In Progress' },
-          { key: 'resolved', label: 'Resolved' },
+          { key: 'all', label: t.all },
+          { key: 'pending', label: t.pending },
+          { key: 'in_progress', label: t.inProgress },
+          { key: 'resolved', label: t.resolved },
         ].map(tab => (
           <button
             key={tab.key}
@@ -104,24 +133,25 @@ export default function TicketsPage() {
       </div>
 
       {loading ? (
-        <div style={{ padding: '48px', textAlign: 'center', color: '#8a7f72' }}>Loading tickets...</div>
+        <div style={{ padding: '48px', textAlign: 'center', color: '#8a7f72' }}>{t.loading}</div>
       ) : filtered.length === 0 ? (
         <div style={{
           padding: '48px', textAlign: 'center', color: '#8a7f72',
           background: '#fff', borderRadius: '16px', border: '1px solid #e8e2d6',
         }}>
-          No tickets found for this filter.
+          {t.empty}
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {filtered.map(t => {
-            const p = PRIORITY_STYLE[t.priority] || PRIORITY_STYLE.low;
-            const s = STATUS_STYLE[t.status] || STATUS_STYLE.pending;
-            const hasImage = !!t.image_url;
+          {filtered.map(ticket => {
+            const p = PRIORITY_STYLE[ticket.priority] || PRIORITY_STYLE.low;
+            const s = STATUS_STYLE[ticket.status] || STATUS_STYLE.pending;
+            const hasImage = !!ticket.image_url;
+            const stLabel = ticket.status === 'pending' ? t.pending : ticket.status === 'in_progress' ? t.inProgress : t.resolved;
             return (
               <div
-                key={t.id}
-                onClick={() => setSelectedTicket(t)}
+                key={ticket.id}
+                onClick={() => setSelectedTicket(ticket)}
                 style={{
                   background: '#ffffff', borderRadius: '14px',
                   border: '1px solid #e8e2d6',
@@ -138,25 +168,25 @@ export default function TicketsPage() {
                 onMouseLeave={e => e.currentTarget.style.boxShadow = '0 1px 6px rgba(0,0,0,0.04)'}
               >
                 <div style={{ fontSize: '12px', fontFamily: 'monospace', color: '#c4bfb5', fontWeight: '600' }}>
-                  #{t.id}
+                  #{ticket.id}
                 </div>
 
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a14', textTransform: 'capitalize', marginBottom: '3px' }}>
-                    {t.type}
+                    {ticket.type}
                     {hasImage && <span style={{ marginLeft: '8px', fontSize: '14px', opacity: 0.5 }}>🖼️</span>}
                   </div>
                   <div style={{ fontSize: '12px', color: '#8a7f72', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '240px' }}>
-                    {t.description}
+                    {ticket.description}
                   </div>
                 </div>
 
                 <div>
                   <div style={{ fontSize: '13px', color: '#1a1a14', fontWeight: '500', marginBottom: '2px' }}>
-                    {t.student_name || '—'}
+                    {ticket.student_name || '—'}
                   </div>
                   <div style={{ fontSize: '11px', color: '#8a7f72' }}>
-                    Room: <strong>{t.room_number || '—'}</strong>
+                    {t.roomLabel} <strong>{ticket.room_number || '—'}</strong>
                   </div>
                 </div>
 
@@ -168,7 +198,7 @@ export default function TicketsPage() {
                     background: p.bg, color: p.color, border: `1px solid ${p.border}`,
                   }}>
                     <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: p.dot, flexShrink: 0 }} />
-                    {t.priority}
+                    {ticket.priority}
                   </span>
                 </div>
 
@@ -179,14 +209,14 @@ export default function TicketsPage() {
                     fontSize: '11px', fontWeight: '700',
                     background: s.bg, color: s.color,
                   }}>
-                    {s.label}
+                    {stLabel}
                   </span>
                 </div>
 
                 <div onClick={e => e.stopPropagation()}>
                   <select
-                    value={t.status}
-                    onChange={e => updateStatus(t.id, e.target.value)}
+                    value={ticket.status}
+                    onChange={e => updateStatus(ticket.id, e.target.value)}
                     style={{
                       width: '100%', padding: '7px 10px', borderRadius: '8px',
                       border: '1.5px solid #e8e2d6',
@@ -196,15 +226,15 @@ export default function TicketsPage() {
                     onFocus={e => e.target.style.borderColor = '#d45c3c'}
                     onBlur={e => e.target.style.borderColor = '#e8e2d6'}
                   >
-                    <option value="pending">Pending</option>
-                    <option value="in_progress">In Progress</option>
-                    <option value="resolved">Resolved</option>
+                    <option value="pending">{t.pending}</option>
+                    <option value="in_progress">{t.inProgress}</option>
+                    <option value="resolved">{t.resolved}</option>
                   </select>
                 </div>
-                <div onClick={e => { e.stopPropagation(); handleDelete(t.id); }} style={{ cursor: 'pointer', color: '#c4bfb5', display: 'flex', justifyContent: 'center', transition: 'color 0.15s' }}
+                <div onClick={e => { e.stopPropagation(); handleDelete(ticket.id); }} style={{ cursor: 'pointer', color: '#c4bfb5', display: 'flex', justifyContent: 'center', transition: 'color 0.15s' }}
                   onMouseEnter={e => e.currentTarget.style.color = '#d45c3c'}
                   onMouseLeave={e => e.currentTarget.style.color = '#c4bfb5'}
-                  title="Delete ticket"
+                  title={t.delete}
                 >
                   <Trash2 size={16} />
                 </div>
@@ -239,7 +269,7 @@ export default function TicketsPage() {
               padding: '20px 24px', borderBottom: '1px solid #e8e2d6',
             }}>
               <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a14' }}>
-                Ticket #{selectedTicket.id}
+                {t.ticket} #{selectedTicket.id}
               </h2>
               <button
                 onClick={() => setSelectedTicket(null)}
@@ -256,43 +286,43 @@ export default function TicketsPage() {
             <div style={{ padding: '24px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Type</div>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{t.type}</div>
                   <div style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a14', textTransform: 'capitalize' }}>{selectedTicket.type}</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Status</div>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{t.status}</div>
                   <span style={{
                     display: 'inline-block', padding: '4px 10px', borderRadius: '20px',
                     fontSize: '11px', fontWeight: '700',
                     background: (STATUS_STYLE[selectedTicket.status] || STATUS_STYLE.pending).bg,
                     color: (STATUS_STYLE[selectedTicket.status] || STATUS_STYLE.pending).color,
                   }}>
-                    {(STATUS_STYLE[selectedTicket.status] || STATUS_STYLE.pending).label}
+                    {selectedTicket.status === 'pending' ? t.pending : selectedTicket.status === 'in_progress' ? t.inProgress : t.resolved}
                   </span>
                 </div>
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Student</div>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{t.student}</div>
                   <div style={{ fontSize: '14px', color: '#1a1a14' }}>{selectedTicket.student_name || '—'}</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Room</div>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{t.room}</div>
                   <div style={{ fontSize: '14px', color: '#1a1a14' }}>{selectedTicket.room_number || '—'}</div>
                 </div>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Description</div>
+                <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{t.description}</div>
                 <div style={{ fontSize: '13px', color: '#1a1a14', lineHeight: '1.6', background: '#fafaf7', padding: '12px 14px', borderRadius: '10px', border: '1px solid #f5f1ea' }}>
-                  {selectedTicket.description || 'No description provided.'}
+                  {selectedTicket.description || t.noDesc}
                 </div>
               </div>
 
               {selectedTicket.image_url && (
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>Attached Image</div>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>{t.image}</div>
                   <img
                     src={selectedTicket.image_url.startsWith('/') ? `${API_ORIGIN}${selectedTicket.image_url}` : `${API_ORIGIN}/${selectedTicket.image_url}`}
-                    alt="Ticket"
+                    alt={t.ticket}
                     style={{
                       width: '100%', maxHeight: '360px', objectFit: 'contain',
                       borderRadius: '12px', border: '1px solid #e8e2d6',

@@ -3,6 +3,87 @@ import api from '../api/axios';
 import { Users, Search, Plus, X, UserPlus, Save, GraduationCap, Edit2, Trash2, Sparkles } from 'lucide-react';
 import { ConfirmDialog, AlertDialog } from '../components/CustomDialogs';
 
+const T = {
+  en: {
+    title: 'Students Inventory', subtitle: 'Manage full student profiles, LMD levels, and residency details.',
+    registered: 'Registered', search: 'Search by name, matricule, NIN, or speciality...',
+    student: 'Student', matricule: 'Matricule', nin: 'NIN', level: 'Level', wilaya: 'Wilaya',
+    room: 'Room', actions: 'Actions', loading: 'Loading...', empty: 'No students found in the database.',
+    noSpeciality: 'No speciality', unknown: 'Unknown', unassigned: 'Unassigned',
+    edit: 'Edit', delete: 'Delete', registerNew: 'Register New Student', editProfile: 'Edit Student Profile',
+    profileSub: 'Comprehensive student and residency profile',
+    personalInfo: 'Personal Information', academicInfo: 'Academic & Identity Details', accommodation: 'Accommodation Assignment',
+    firstName: 'First Name (Prénom)', lastName: 'Last Name (Nom)', dateOfBirth: 'Date of Birth',
+    gender: 'Gender', municipality: 'Municipality (Baladiya)',
+    studentId: 'Student ID (Matricule)', email: 'Email (for login)', nationalId: 'National ID (NIN / Carte Nat.)',
+    department: 'Department / Faculty', speciality: 'Speciality (Spécialité)', studyYear: 'Level of Study (LMD)',
+    residence: 'Residence / Department', bloc: 'Bloc / Building', roomNumber: 'Room Number', phone: 'Phone Number',
+    firstNamePlace: 'Ahmed', lastNamePlace: 'Benali', selectWilaya: 'Select Wilaya...',
+    municipalityPlace: 'e.g. Blida Centre', studentIdPlace: 'e.g. 2026123456', emailPlace: 'student@university.dz',
+    nationalIdPlace: '18-digit national number', departmentPlace: 'e.g. Sciences Appliquées',
+    specialityPlace: 'e.g. Informatique (IA)', selectLevel: 'Select level...',
+    residencePlace: 'e.g. Résidence 1', blocPlace: 'e.g. A, B, C', roomPlace: 'e.g. 104',
+    phonePlace: '05XX XX XX XX', male: 'Male (ذكر)', female: 'Female (أنثى)',
+    smartAssign: 'Smart Assign', cancel: 'Cancel', saving: 'Saving...',
+    registerStudent: 'Register Student', updateStudent: 'Update Student',
+    saveError: 'Error saving student. Check for duplicates.',
+    noRooms: 'No available rooms found for auto-assignment.',
+    deleteFail: 'Failed to delete student.', deleteConfirm: 'Are you sure you want to delete this student?',
+  },
+  ar: {
+    title: 'سجل الطلبة', subtitle: 'إدارة ملفات الطلبة الكاملة ومستويات LMD وتفاصيل الإقامة.',
+    registered: 'مسجل', search: 'ابحث بالاسم، رقم التسجيل، NIN، أو التخصص...',
+    student: 'الطالب', matricule: 'رقم التسجيل', nin: 'رقم الوطني', level: 'المستوى', wilaya: 'الولاية',
+    room: 'الغرفة', actions: 'الإجراءات', loading: 'جاري التحميل...', empty: 'لا يوجد طلبة في قاعدة البيانات.',
+    noSpeciality: 'لا يوجد تخصص', unknown: 'غير معروف', unassigned: 'غير مسكن',
+    edit: 'تعديل', delete: 'حذف', registerNew: 'تسجيل طالب جديد', editProfile: 'تعديل ملف الطالب',
+    profileSub: 'الملف الشامل للطالب والإقامة',
+    personalInfo: 'المعلومات الشخصية', academicInfo: 'التفاصيل الأكاديمية والهوية', accommodation: 'تعيين السكن',
+    firstName: 'الاسم الأول', lastName: 'اللقب', dateOfBirth: 'تاريخ الميلاد',
+    gender: 'الجنس', municipality: 'البلدية',
+    studentId: 'رقم الطالب', email: 'البريد الإلكتروني (لتسجيل الدخول)', nationalId: 'رقم الهوية الوطني',
+    department: 'القسم / الكلية', speciality: 'التخصص', studyYear: 'مستوى الدراسة (LMD)',
+    residence: 'الإقامة / القسم', bloc: 'المبنى', roomNumber: 'رقم الغرفة', phone: 'رقم الهاتف',
+    firstNamePlace: 'أحمد', lastNamePlace: 'بن علي', selectWilaya: 'اختر الولاية...',
+    municipalityPlace: 'مثال: مركز البليدة', studentIdPlace: 'مثال: 2026123456', emailPlace: 'student@university.dz',
+    nationalIdPlace: 'رقم وطني مكون من 18 رقم', departmentPlace: 'مثال: علوم تطبيقية',
+    specialityPlace: 'مثال: إعلام آلي', selectLevel: 'اختر المستوى...',
+    residencePlace: 'مثال: الإقامة 1', blocPlace: 'مثال: أ، ب، ج', roomPlace: 'مثال: 104',
+    phonePlace: '05XX XX XX XX', male: 'ذكر', female: 'أنثى',
+    smartAssign: 'تخصيص ذكي', cancel: 'إلغاء', saving: 'جاري الحفظ...',
+    registerStudent: 'تسجيل الطالب', updateStudent: 'تحديث الطالب',
+    saveError: 'خطأ في حفظ الطالب. تحقق من عدم وجود تكرار.',
+    noRooms: 'لا توجد غرف متاحة للتخصيص التلقائي.',
+    deleteFail: 'فشل حذف الطالب.', deleteConfirm: 'هل أنت متأكد من حذف هذا الطالب؟',
+  },
+  fr: {
+    title: 'Registre des Étudiants', subtitle: 'Gérer les profils complets des étudiants, niveaux LMD et résidence.',
+    registered: 'Inscrits', search: 'Rechercher par nom, matricule, NIN ou spécialité...',
+    student: 'Étudiant', matricule: 'Matricule', nin: 'NIN', level: 'Niveau', wilaya: 'Wilaya',
+    room: 'Chambre', actions: 'Actions', loading: 'Chargement...', empty: 'Aucun étudiant dans la base.',
+    noSpeciality: 'Aucune spécialité', unknown: 'Inconnu', unassigned: 'Non assigné',
+    edit: 'Modifier', delete: 'Supprimer', registerNew: 'Inscrire un Nouvel Étudiant', editProfile: 'Modifier le Profil',
+    profileSub: 'Profil complet étudiant et résidence',
+    personalInfo: 'Informations Personnelles', academicInfo: 'Détails Académiques & Identité', accommodation: 'Affectation Logement',
+    firstName: 'Prénom', lastName: 'Nom', dateOfBirth: 'Date de Naissance',
+    gender: 'Sexe', municipality: 'Commune',
+    studentId: 'Matricule', email: 'Email (connexion)', nationalId: 'NIN / Carte Nationale',
+    department: 'Département / Faculté', speciality: 'Spécialité', studyYear: 'Niveau d\'Étude (LMD)',
+    residence: 'Résidence / Département', bloc: 'Bloc / Bâtiment', roomNumber: 'Numéro de Chambre', phone: 'Téléphone',
+    firstNamePlace: 'Ahmed', lastNamePlace: 'Benali', selectWilaya: 'Sélectionnez la Wilaya...',
+    municipalityPlace: 'ex: Centre Blida', studentIdPlace: 'ex: 2026123456', emailPlace: 'etudiant@universite.dz',
+    nationalIdPlace: 'Numéro national 18 chiffres', departmentPlace: 'ex: Sciences Appliquées',
+    specialityPlace: 'ex: Informatique (IA)', selectLevel: 'Sélectionnez le niveau...',
+    residencePlace: 'ex: Résidence 1', blocPlace: 'ex: A, B, C', roomPlace: 'ex: 104',
+    phonePlace: '05XX XX XX XX', male: 'Masculin', female: 'Féminin',
+    smartAssign: 'Affectation Intelligente', cancel: 'Annuler', saving: 'Enregistrement...',
+    registerStudent: 'Inscrire', updateStudent: 'Mettre à Jour',
+    saveError: 'Erreur lors de l\'enregistrement. Vérifiez les doublons.',
+    noRooms: 'Aucune chambre disponible pour l\'affectation automatique.',
+    deleteFail: 'Échec de la suppression.', deleteConfirm: 'Voulez-vous vraiment supprimer cet étudiant ?',
+  }
+};
+
 const ALGERIAN_WILAYAS = [
   "01 - Adrar", "02 - Chlef", "03 - Laghouat", "04 - Oum El Bouaghi", "05 - Batna", "06 - Béjaïa", "07 - Biskra", "08 - Béchar", "09 - Blida", "10 - Bouira",
   "11 - Tamanrasset", "12 - Tébessa", "13 - Tlemcen", "14 - Tiaret", "15 - Tizi Ouzou", "16 - Alger", "17 - Djelfa", "18 - Jijel", "19 - Sétif", "20 - Saïda",
@@ -19,6 +100,8 @@ const STUDY_YEARS = [
 ];
 
 export default function StudentsPage() {
+  const [lang] = useState(() => localStorage.getItem('lang') || 'en');
+  const t = T[lang] || T.en;
   const [students, setStudents] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -84,7 +167,7 @@ export default function StudentsPage() {
       });
       fetchData();
     } catch (err) {
-      setFormError(err.response?.data?.error || 'Error saving student. Check for duplicates.');
+      setFormError(err.response?.data?.error || t.saveError);
     } finally {
       setIsSubmitting(false);
     }
@@ -125,19 +208,19 @@ export default function StudentsPage() {
         room_number: res.data.room_number
       }));
     } catch (err) {
-      setFormError(err.response?.data?.error || 'No available rooms found for auto-assignment.');
+      setFormError(err.response?.data?.error || t.noRooms);
     }
   };
 
   const handleDeleteClick = (id) => {
     setConfirmDialog({
-      message: 'Are you sure you want to delete this student?',
+      message: t.deleteConfirm,
       onConfirm: async () => {
         try {
           await api.delete(`/students/${id}`);
           fetchData();
         } catch (err) {
-          setAlertDialog({ message: 'Failed to delete student.' });
+          setAlertDialog({ message: t.deleteFail });
         }
       }
     });
@@ -158,8 +241,8 @@ export default function StudentsPage() {
       {/* ── Header ── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a14', marginBottom: '4px' }}>Students Inventory</h1>
-          <p style={{ color: '#8a7f72', fontSize: '13px' }}>Manage full student profiles, LMD levels, and residency details.</p>
+          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a14', marginBottom: '4px' }}>{t.title}</h1>
+          <p style={{ color: '#8a7f72', fontSize: '13px' }}>{t.subtitle}</p>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
           <div style={{
@@ -168,7 +251,7 @@ export default function StudentsPage() {
             fontSize: '13px', fontWeight: '700', border: '1px solid #f8c7b4',
             display: 'flex', alignItems: 'center'
           }}>
-            {students.length} Registered
+            {students.length} {t.registered}
           </div>
           <button
             onClick={() => {
@@ -190,7 +273,7 @@ export default function StudentsPage() {
             onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
             onMouseLeave={e => e.currentTarget.style.transform = 'none'}
           >
-            <UserPlus size={18} /> Add Student
+            <UserPlus size={18} /> {t.registerNew}
           </button>
         </div>
       </div>
@@ -201,7 +284,7 @@ export default function StudentsPage() {
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Search by name, matricule, NIN, or speciality..."
+          placeholder={t.search}
           style={{
             width: '100%', padding: '11px 14px 11px 40px',
             borderRadius: '12px', border: '1px solid #e8e2d6',
@@ -216,15 +299,15 @@ export default function StudentsPage() {
       {/* ── Table ── */}
       <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e8e2d6', overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '2.5fr 1fr 1fr 1fr 1fr 1fr 80px', gap: '0', padding: '12px 20px', background: '#f9f7f3', borderBottom: '1px solid #e8e2d6' }}>
-          {['Student', 'Matricule', 'NIN', 'Level', 'Wilaya', 'Room', 'Actions'].map(h => (
+          {[t.student, t.matricule, t.nin, t.level, t.wilaya, t.room, t.actions].map(h => (
             <div key={h} style={{ fontSize: '11px', fontWeight: '700', color: '#8a7f72', textTransform: 'uppercase', letterSpacing: '0.6px', textAlign: h === 'Actions' ? 'right' : 'left' }}>{h}</div>
           ))}
         </div>
 
         {loading ? (
-          <div style={{ padding: '48px', textAlign: 'center', color: '#8a7f72' }}>Loading...</div>
+              <div style={{ padding: '48px', textAlign: 'center', color: '#8a7f72' }}>{t.loading}</div>
         ) : filtered.length === 0 ? (
-          <div style={{ padding: '48px', textAlign: 'center', color: '#8a7f72', fontSize: '14px' }}>No students found in the database.</div>
+          <div style={{ padding: '48px', textAlign: 'center', color: '#8a7f72', fontSize: '14px' }}>{t.empty}</div>
         ) : filtered.map((s, i) => (
           <div
             key={s.id}
@@ -249,28 +332,28 @@ export default function StudentsPage() {
               </div>
               <div>
                 <div style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a14' }}>{s.name}</div>
-                <div style={{ fontSize: '11px', color: '#8a7f72', marginTop: '2px' }}>{s.speciality || 'No speciality'}</div>
+                <div style={{ fontSize: '11px', color: '#8a7f72', marginTop: '2px' }}>{s.speciality || t.noSpeciality}</div>
               </div>
             </div>
             <div style={{ fontSize: '12px', fontFamily: 'monospace', color: '#8a7f72', fontWeight: '500' }}>{s.student_number || '—'}</div>
             <div style={{ fontSize: '12px', fontFamily: 'monospace', color: '#8a7f72', fontWeight: '500' }}>{s.national_id || '—'}</div>
             <div>
               <span style={{ padding: '4px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: '700', background: '#fef0df', color: '#b8631c' }}>
-                {s.study_year || 'Unknown'}
+                {s.study_year || t.unknown}
               </span>
             </div>
             <div style={{ fontSize: '12px', color: '#5a5248', fontWeight: '600' }}>{s.wilaya ? s.wilaya.split(' - ')[1] : '—'}</div>
             <div>
               {s.room_number
-                ? <span style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: '700', background: '#e3ebd0', color: '#5c651f', border: '1px solid #c7d6a2' }}>Bloc {s.building} - {s.room_number}</span>
-                : <span style={{ fontSize: '12px', color: '#c4bfb5', fontStyle: 'italic' }}>Unassigned</span>
+                ? <span style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: '700', background: '#e3ebd0', color: '#5c651f', border: '1px solid #c7d6a2' }}>{t.bloc} {s.building} - {s.room_number}</span>
+                : <span style={{ fontSize: '12px', color: '#c4bfb5', fontStyle: 'italic' }}>{t.unassigned}</span>
               }
             </div>
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-              <button onClick={() => handleEditClick(s)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8ea45c' }} title="Edit">
+              <button onClick={() => handleEditClick(s)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8ea45c' }} title={t.edit}>
                 <Edit2 size={16} />
               </button>
-              <button onClick={() => handleDeleteClick(s.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d45c3c' }} title="Delete">
+              <button onClick={() => handleDeleteClick(s.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d45c3c' }} title={t.delete}>
                 <Trash2 size={16} />
               </button>
             </div>
@@ -296,8 +379,8 @@ export default function StudentsPage() {
                   <GraduationCap size={20} />
                 </div>
                 <div>
-                  <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#1a1a14' }}>{editStudentId ? 'Edit Student Profile' : 'Register New Student'}</h2>
-                  <p style={{ fontSize: '12px', color: '#8a7f72' }}>Comprehensive student and residency profile</p>
+                  <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#1a1a14' }}>{editStudentId ? t.editProfile : t.registerNew}</h2>
+                  <p style={{ fontSize: '12px', color: '#8a7f72' }}>{t.profileSub}</p>
                 </div>
               </div>
               <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8a7f72' }}>
@@ -316,110 +399,110 @@ export default function StudentsPage() {
                 
                 {/* Personal Info Section */}
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#5c651f', borderBottom: '1px solid #e8e2d6', paddingBottom: '8px', marginBottom: '16px' }}>Personal Information</h3>
+                  <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#5c651f', borderBottom: '1px solid #e8e2d6', paddingBottom: '8px', marginBottom: '16px' }}>{t.personalInfo}</h3>
                 </div>
 
                 <div>
-                  <label style={labelStyle}>First Name (Prénom)</label>
-                  <input required name="first_name" value={formData.first_name} onChange={handleInputChange} style={inputStyle} placeholder="Ahmed" />
+                  <label style={labelStyle}>{t.firstName}</label>
+                  <input required name="first_name" value={formData.first_name} onChange={handleInputChange} style={inputStyle} placeholder={t.firstNamePlace} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Last Name (Nom)</label>
-                  <input required name="last_name" value={formData.last_name} onChange={handleInputChange} style={inputStyle} placeholder="Benali" />
+                  <label style={labelStyle}>{t.lastName}</label>
+                  <input required name="last_name" value={formData.last_name} onChange={handleInputChange} style={inputStyle} placeholder={t.lastNamePlace} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Date of Birth</label>
+                  <label style={labelStyle}>{t.dateOfBirth}</label>
                   <input type="date" required name="date_of_birth" value={formData.date_of_birth} onChange={handleInputChange} style={inputStyle} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Gender</label>
+                  <label style={labelStyle}>{t.gender}</label>
                   <select name="gender" value={formData.gender} onChange={handleInputChange} style={inputStyle}>
-                    <option value="Male">Male (ذكر)</option>
-                    <option value="Female">Female (أنثى)</option>
+                    <option value="Male">{t.male}</option>
+                    <option value="Female">{t.female}</option>
                   </select>
                 </div>
                 <div>
-                  <label style={labelStyle}>Wilaya</label>
+                  <label style={labelStyle}>{t.wilaya}</label>
                   <select required name="wilaya" value={formData.wilaya} onChange={handleInputChange} style={inputStyle}>
-                    <option value="">Select Wilaya...</option>
+                    <option value="">{t.selectWilaya}</option>
                     {ALGERIAN_WILAYAS.map(w => <option key={w} value={w}>{w}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label style={labelStyle}>Municipality (Baladiya)</label>
-                  <input required name="baladiya" value={formData.baladiya} onChange={handleInputChange} style={inputStyle} placeholder="e.g. Blida Centre" />
+                  <label style={labelStyle}>{t.municipality}</label>
+                  <input required name="baladiya" value={formData.baladiya} onChange={handleInputChange} style={inputStyle} placeholder={t.municipalityPlace} />
                 </div>
 
                 {/* Academic Info Section */}
                 <div style={{ gridColumn: '1 / -1', marginTop: '12px' }}>
-                  <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#5c651f', borderBottom: '1px solid #e8e2d6', paddingBottom: '8px', marginBottom: '16px' }}>Academic & Identity Details</h3>
+                  <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#5c651f', borderBottom: '1px solid #e8e2d6', paddingBottom: '8px', marginBottom: '16px' }}>{t.academicInfo}</h3>
                 </div>
 
                 <div>
-                  <label style={labelStyle}>Student ID (Matricule)</label>
-                  <input required name="student_number" value={formData.student_number} onChange={handleInputChange} style={inputStyle} placeholder="e.g. 2026123456" />
+                  <label style={labelStyle}>{t.studentId}</label>
+                  <input required name="student_number" value={formData.student_number} onChange={handleInputChange} style={inputStyle} placeholder={t.studentIdPlace} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Email (for login)</label>
-                  <input name="email" value={formData.email || ''} onChange={handleInputChange} style={inputStyle} placeholder="student@university.dz" type="email" />
+                  <label style={labelStyle}>{t.email}</label>
+                  <input name="email" value={formData.email || ''} onChange={handleInputChange} style={inputStyle} placeholder={t.emailPlace} type="email" />
                 </div>
                 <div>
-                  <label style={labelStyle}>National ID (NIN / Carte Nat.)</label>
-                  <input required name="national_id" value={formData.national_id} onChange={handleInputChange} style={inputStyle} placeholder="18-digit national number" />
+                  <label style={labelStyle}>{t.nationalId}</label>
+                  <input required name="national_id" value={formData.national_id} onChange={handleInputChange} style={inputStyle} placeholder={t.nationalIdPlace} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Department / Faculty</label>
-                  <input required name="department" value={formData.department} onChange={handleInputChange} style={inputStyle} placeholder="e.g. Sciences Appliquées" />
+                  <label style={labelStyle}>{t.department}</label>
+                  <input required name="department" value={formData.department} onChange={handleInputChange} style={inputStyle} placeholder={t.departmentPlace} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Speciality (Spécialité)</label>
-                  <input required name="speciality" value={formData.speciality} onChange={handleInputChange} style={inputStyle} placeholder="e.g. Informatique (IA)" />
+                  <label style={labelStyle}>{t.speciality}</label>
+                  <input required name="speciality" value={formData.speciality} onChange={handleInputChange} style={inputStyle} placeholder={t.specialityPlace} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Level of Study (LMD)</label>
+                  <label style={labelStyle}>{t.studyYear}</label>
                   <select required name="study_year" value={formData.study_year} onChange={handleInputChange} style={inputStyle}>
-                    <option value="">Select level...</option>
+                    <option value="">{t.selectLevel}</option>
                     {STUDY_YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
                 </div>
 
                 {/* Accommodation Section */}
                 <div style={{ gridColumn: '1 / -1', marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e8e2d6', paddingBottom: '8px', marginBottom: '16px' }}>
-                  <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#5c651f' }}>Accommodation Assignment</h3>
+                  <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#5c651f' }}>{t.accommodation}</h3>
                   <button type="button" onClick={handleSmartAssign} style={{
                     display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px',
                     background: '#f4f6ec', color: '#5c651f', border: '1px solid #c7d6a2', fontSize: '12px', fontWeight: '700', cursor: 'pointer'
                   }}>
-                    <Sparkles size={14} /> Smart Assign
+                    <Sparkles size={14} /> {t.smartAssign}
                   </button>
                 </div>
 
                 <div>
-                  <label style={labelStyle}>Residence / Department</label>
-                  <input name="residence" value={formData.residence} onChange={handleInputChange} style={inputStyle} placeholder="e.g. Résidence 1" />
+                  <label style={labelStyle}>{t.residence}</label>
+                  <input name="residence" value={formData.residence} onChange={handleInputChange} style={inputStyle} placeholder={t.residencePlace} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Bloc / Building</label>
-                  <input name="building" value={formData.building} onChange={handleInputChange} style={inputStyle} placeholder="e.g. A, B, C" />
+                  <label style={labelStyle}>{t.bloc}</label>
+                  <input name="building" value={formData.building} onChange={handleInputChange} style={inputStyle} placeholder={t.blocPlace} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Room Number</label>
-                  <input name="room_number" value={formData.room_number} onChange={handleInputChange} style={inputStyle} placeholder="e.g. 104" />
+                  <label style={labelStyle}>{t.roomNumber}</label>
+                  <input name="room_number" value={formData.room_number} onChange={handleInputChange} style={inputStyle} placeholder={t.roomPlace} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Phone Number</label>
-                  <input name="phone" value={formData.phone} onChange={handleInputChange} style={inputStyle} placeholder="05XX XX XX XX" />
+                  <label style={labelStyle}>{t.phone}</label>
+                  <input name="phone" value={formData.phone} onChange={handleInputChange} style={inputStyle} placeholder={t.phonePlace} />
                 </div>
                 {/* Footer Buttons */}
                 <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid #e8e2d6' }}>
                   <button type="button" onClick={() => setIsModalOpen(false)} style={{ padding: '12px 24px', borderRadius: '10px', border: '1px solid #e8e2d6', background: '#fff', color: '#8a7f72', fontWeight: '600', cursor: 'pointer' }}>
-                    Cancel
+                    {t.cancel}
                   </button>
                   <button type="submit" disabled={isSubmitting} style={{
                     padding: '12px 24px', borderRadius: '10px', border: 'none', background: '#d45c3c', color: '#fff', fontWeight: '700',
                     cursor: isSubmitting ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px', opacity: isSubmitting ? 0.7 : 1
                   }}>
-                    <Save size={16} /> {isSubmitting ? 'Saving...' : (editStudentId ? 'Update Student' : 'Register Student')}
+                    <Save size={16} /> {isSubmitting ? t.saving : (editStudentId ? t.updateStudent : t.registerStudent)}
                   </button>
                 </div>
               </form>

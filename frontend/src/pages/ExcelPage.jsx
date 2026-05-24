@@ -204,7 +204,7 @@ export default function ExcelPage() {
       setShowMappingWizard(true);
     } catch (err) {
       console.error('Failed to parse file headers:', err);
-      // Fallback directly
+      setError(err.response?.data?.error || 'Failed to analyse file. Make sure it has readable column headers.');
       setShowMappingWizard(false);
     } finally {
       setParsingFile(false);
@@ -246,8 +246,9 @@ export default function ExcelPage() {
       document.body.appendChild(link);
       link.click();
       link.remove();
-    } catch { 
-      setAlertDialog({ message: 'Download failed' });
+    } catch (err) { 
+      console.error('Export download failed:', err);
+      setAlertDialog({ message: err.response?.data?.error || 'Download failed' });
     }
   };
 

@@ -41,6 +41,7 @@ export const importStudents = async (req, res) => {
         mappings = typeof req.body.mappings === 'string' ? JSON.parse(req.body.mappings) : req.body.mappings;
       } catch (err) {
         console.error('Failed to parse mappings:', err);
+        return res.status(400).json({ error: `Invalid column mappings: ${err.message}` });
       }
     }
 
@@ -128,7 +129,7 @@ export const importStudents = async (req, res) => {
           errors.push(`Row ${i + 2}: Duplicate student_number or national_id`);
         } else {
           skipped++;
-          errors.push(`Row ${i + 2}: Database formatting or constraint error`);
+          errors.push(`Row ${i + 2}: ${err.message}`);
         }
       }
     }
@@ -154,6 +155,7 @@ export const importRooms = async (req, res) => {
         mappings = typeof req.body.mappings === 'string' ? JSON.parse(req.body.mappings) : req.body.mappings;
       } catch (err) {
         console.error('Failed to parse mappings:', err);
+        return res.status(400).json({ error: `Invalid column mappings: ${err.message}` });
       }
     }
 
@@ -195,7 +197,7 @@ export const importRooms = async (req, res) => {
           errors.push(`Row ${i + 2}: Duplicate room_number ${room_number}`);
         } else {
           skipped++;
-          errors.push(`Row ${i + 2}: Database error`);
+          errors.push(`Row ${i + 2}: ${err.message}`);
         }
       }
     }
