@@ -20,9 +20,9 @@ const T = {
     loginTitle: 'تسجيل الدخول',
     loginSub: 'Connexion au système d\'administration',
     emailLabel: 'البريد الإلكتروني · Email',
-    emailPlaceholder: 'admin@blida2.dz',
+    emailPlaceholder: 'nom@university.dz',
     passLabel: 'كلمة المرور · Mot de passe',
-    passPlaceholder: '••••••••••',
+    passPlaceholder: '',
     btnLoading: 'جاري التحقق...',
     btnSignIn: 'دخول · Sign In · Connexion',
     restricted: 'هذا النظام مخصص للموظفين والإداريين فقط',
@@ -47,9 +47,9 @@ const T = {
     loginTitle: 'Connexion',
     loginSub: 'Accès au système d\'administration universitaire',
     emailLabel: 'Adresse e-mail · البريد الإلكتروني',
-    emailPlaceholder: 'admin@blida2.dz',
+    emailPlaceholder: 'nom@university.dz',
     passLabel: 'Mot de passe · كلمة المرور',
-    passPlaceholder: '••••••••••',
+    passPlaceholder: '',
     btnLoading: 'Vérification en cours...',
     btnSignIn: 'Connexion · Sign In · دخول',
     restricted: 'Accès réservé au personnel administratif',
@@ -74,9 +74,9 @@ const T = {
     loginTitle: 'Sign In',
     loginSub: 'Access the university administration portal',
     emailLabel: 'Email Address · البريد الإلكتروني',
-    emailPlaceholder: 'admin@blida2.dz',
+    emailPlaceholder: 'name@university.dz',
     passLabel: 'Password · كلمة المرور',
-    passPlaceholder: '••••••••••',
+    passPlaceholder: '',
     btnLoading: 'Verifying...',
     btnSignIn: 'Sign In · Connexion · دخول',
     restricted: 'This system is restricted to authorized staff only',
@@ -89,6 +89,7 @@ const T = {
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [lang, setLang] = useState('ar');
@@ -440,22 +441,53 @@ export default function LoginPage() {
               }}>
                 {t.passLabel}
               </label>
-              <input
-                type="password" required
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder={t.passPlaceholder}
-                style={{
-                  width: '100%', padding: '12px 14px', borderRadius: '10px',
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: '#ffffff', fontSize: '14px',
-                  outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s',
-                  direction: 'ltr',
-                }}
-                onFocus={e => e.target.style.borderColor = 'rgba(100,160,60,0.7)'}
-                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
-              />
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'} required
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder={t.passPlaceholder}
+                  style={{
+                    width: '100%', padding: '12px 44px 12px 14px', borderRadius: '10px',
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: '#ffffff', fontSize: '14px',
+                    outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s',
+                    direction: 'ltr',
+                  }}
+                  onFocus={e => e.target.style.borderColor = 'rgba(100,160,60,0.7)'}
+                  onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                  style={{
+                    position: 'absolute', top: '50%', right: t.dir === 'rtl' ? 'auto' : '12px',
+                    left: t.dir === 'rtl' ? '12px' : 'auto',
+                    transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: 'rgba(255,255,255,0.35)', padding: '4px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'color 0.2s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
+                  onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}
+                >
+                  {showPassword ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  ) : (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Submit */}
